@@ -1,3 +1,10 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  namespace :api do
+    namespace :v1 do
+      get '/links', to: 'links#index'
+      post '/links', to: 'links#create'
+      get '/links/:slug', to: 'links#show'
+      delete '/links/:slug', to: 'links#destroy'
+    end
+  end
 end
