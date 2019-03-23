@@ -11,4 +11,13 @@ class Api::V1::LinksController < ApplicationController
       render json: {'error' => 'post unsuccessful'}
     end
   end
+
+  def show
+    link = Link.find_by(slug: params[:slug])
+    if link
+      render json: LinksSerializer.new(link)
+    else
+      render json: {'error' => 'cannot find link'}
+    end
+  end
 end

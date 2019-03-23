@@ -49,15 +49,39 @@ describe 'Links API' do
     expect(link_data[:data][:attributes][:clicks]).to eq(0)
   end
 
-  # it 'can show individual link info from slug' do
-  #   link = Link.first
-  #   get "/api/v1/#{link.slug}"
+  it 'cannot create a link with a name that is already used' do
+    link_name = 'hawk'
+    post '/api/v1/links', params: { link: link_name }
 
-  #   expect(response).to be_successful
-  #   link_data = JSON.parse(response.body, symbolize_names: true)
+    link_name = 'hawk'
+    post '/api/v1/links', params: { link: link_name }
 
-  #   expect(link_data[:data][:type]).to eq('links')
-  #   expect(link_data[:data][:attributes][:link]).to eq(link.link)
-  #   expect(link_data[:data][:attributes][:slug]).to eq(link.slug)
-  # end
+    expect(response).to be_successful
+    link_data = JSON.parse(response.body, symbolize_names: true)
+
+    expect(link_data[:error]).to eq('post unsuccessful')
+  end
+
+  it 'can show individual link info from slug' do
+    link = Link.first
+    get "/api/v1/links/#{link.slug}"
+
+    expect(response).to be_successful
+    link_data = JSON.parse(response.body, symbolize_names: true)
+
+    expect(link_data[:data][:type]).to eq('links')
+    expect(link_data[:data][:attributes][:link]).to eq(link.link)
+    expect(link_data[:data][:attributes][:slug]).to eq(link.slug)
+    expect(link_data[:data][:attributes][:clicks]).to eq(link.clicks.count)
+  end
+
+  it 'fails gracefully when slug not found' do
+    link = Link.first
+    get "/api/v1/links/#{link.slug + 'nope'}"
+
+    expect(response).to be_successful
+    link_data = JSON.parse(response.body, symbolize_names: true)
+
+    expect(link_data[:error]).to eq('cannot find link')
+  end
 end

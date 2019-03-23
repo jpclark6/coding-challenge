@@ -4,4 +4,8 @@ class Link < ApplicationRecord
   validates :slug, presence: true
 
   has_many :clicks
+
+  def to_param
+    slug
+  end
 end
