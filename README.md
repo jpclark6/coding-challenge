@@ -1,95 +1,66 @@
 # Ambassador Coding Challenge
 
-Our coding challenge is your opportunity to demonstrate your experience, skills, and aptitude by building a prototype of the web’s most minimal referral automation software.
+The API landing page can be found [here](https://ambassador-code-rails.herokuapp.com/api/v1) to see functional endpoints. This may take up to 30 seconds initially if Heroku needs to spin up a dyno.
 
-## How we review
+This is a basic API to serve up data to a website that can track referrals. It has basic CRUD functionality, and can also track visits to a page. It has access to all links, one link, create link, and delete link. When the front end hits the main index '/' it should send a GET request to '/api/v1/links' to get back all links in JSON format to display on the page. This includes click counts. 
 
-Your submission will be reviewed by the Ambassador engineering team. We take your experience level into consideration when reviewing.
+When a user enters in text into the text box to create a new link the site should send a POST request to '/api/v1/links?link={link_title}' which will return the object if successful, or return a 404 with an error if it didn't work, most likely due to the title not being unique. They can then either display this onto the end of the list, or make another GET request for all links.
 
-We value quality over completeness. If you decide to leave things out, please call attention to it in your project's `README`. We are looking to evaluate your skill set and gain insight into how you approach problem solving.
+When someone clicks on a referral link and gets directed to '{url}/spartans' or whatever the title is, the site should make a GET request to '/api/v1/links/spartans' before redirecting to '{url}/landing?link=spartans'. This will return JSON with the link title and also increment the counter by one. 
 
-Our assessment covers the following areas:
+To delete a link the site should send a DELETE request to '/api/v1/links/spartans'. The deleted object will be returned on a successful delete, or a 404 and error will be returned if the delete didn't work. All clicks associated with that endpoint will be deleted.
 
--	Architecture - How have you decided to structure your app? Is there good separation of concerns?
--	Code quality - Are you following good coding practices? Is your code easy to follow and maintain? Is it testable?
--	Correctness - Does your application work? Does it meet the functional spec?
--	Technical choices - Are your choices of libraries, packages, and tooling appropriate?
 
-Bonus points:
+## Problem & Solution
 
--	Testing - Is there adequate test coverage?
--	UX - Is your project easy to use and understand?
+Tim Berners-Lee just created the internet. But what is the internet you say? More people need to find out. Instead of basic advertising I decided to help Tim out with referral marketing. Referral marketing has been shown to have more long term loyal customers along with higher short term spending compared to standard advertising, which means Tim is going to be one happy customer. 
 
-## Guidelines
+To help my good friend get the word out on his awesome new invention I decided to build a referral marketing system for him for free. It's a very basic referral marketing system that can keep track of links, add links, delete links, and find out how many people have clicked on a link.
 
-This project may take some time depending on your familiarity with the frameworks and tools you choose. Make your initial commit very small or blank so that we can get a sense of your style and speed. If you have any questions please do not hesitate to [contact us](eng-challenge@getambassador.com).
+This system will have a back end and a front end. I decided to build the back end API to give easy access for a single page app. By using RESTful endpoints and CRUD functionality it will be easy to integrate with a front end. It also follows the [unofficial json spec](https://jsonapi.org/) to make things easy on the front end developer. 
 
-Begin by forking this repo. You will be completing the challenge in the forked repo and sending a link to your repo when you're finished.
+It includes a basic API launchoff page for people to read that can be found [here](https://ambassador-code-rails.herokuapp.com/api/v1) so that anybody can use it. Future iterations may include security using JSON web tokens, however given the simplicity of the site that seems beyond the current scope. To keep track of clicks the data base uses a Links table and a Clicks table with a foreign ID for a link. This is to ensure that all clicks can be timestamped, and so that any future information, such as IP address, could be added on future iterations if required.
 
-### Background
+## Solution Focus
 
-The year is 1991, and Tim Berners-Lee has just invented the World Wide Web. As his best friend, he turns to you for help growing this crazy new thing. You decide referral marketing is the most effective way to grow support for Tim’s invention and plan to bring word of mouth to the web in the form of a simple, automated referral system.
+The tl;dr of the above is that this is a back-end focused solution since I'm applying for a back end position and I would like to spend time trying to build out a solution in Django also (haven't used it before) rather than work on a front end.
 
-The system you’ve dreamt up is very straightforward. It only needs two pages to satisfy Tim’s needs: one to create, edit, delete, and track referral links and another to serve as a landing page for the links that promotes the World Wide Web.
+## Technical Choices and Tradeoffs
 
-### Functional spec
+I wanted to keep it RESTful and use API versioning in case a later iteration comes out, so keeping endpoints at '/api/v1/links made sense. I also wanted to keep the use of :slugs in the API since I hadn't implimented them before and it seemed like a fun challenge. 
 
-The link page is where Tim will manage his referral links. This page should be located at the root of your domain i.e. {your_url}. There should be a form to add links. It only needs one field, which is the unique title of the link e.g. spartans or wolverines. This title will form the referral url e.g. {your_url}/spartans or {your_url}/wolverines. Below this form should be a list of the active referral links with options to edit or delete links. The # of times a link has been clicked should be tracked and displayed next to each link in the list. The link title should link to the Landing Page.
+It uses a PostgreSQL database since it integrates easily with Heroku. I decided to go with a schema as follows:
 
-![Link Page](https://lh4.googleusercontent.com/E03q_HNyAyBCgyuiLN_UMkqmygSH4k1n2sZAG5p4EyothDtwXIh81nuXF0--JUsJs3PQaJJV_oIKvVqIPlNSU96Q4zT3N1f6E6Pl0XJk7wdqruNi69RlV7yUd_FhztzJEbZUkA)
+### Links
+| ID | Link | Slug | Created_at | Updated_at |
+| --- | ---- | ---- | ---------- | ---------- |
+| 1 | eagle | eagle | 3-23-19 | 3-23-19 |
 
-The landing page is where each referral link should redirect. This page should be located at its own unique url i.e. {your_url}/landing. The content of this page is not important, though you should feel free to use it as a canvas to promote and express your feelings toward the World Wide Web for Tim. When each referral link redirects to the landing page, the link title must be appended as a query parameter in the url e.g. {your_url}/landing/?link={link_title}. The link title should be grabbed from the query parameter and displayed somewhere on the landing page, which is the only content you actually have to include.
+### Clicks
+| ID | Link_id | Created_at | Updated_at |
+| --- | --- | --- | --- |
+| 1 | 1 | 3-23-19 | 3-23-19 |
+| 2 | 1 | 3-23-19 | 3-23-19 |
 
-![Landing Page](https://lh3.googleusercontent.com/HFEsNHwWaII66dB_Pa5nm8WZgPOp3F-jSyMxwFAwyO04O7dFlHovFW9hKovR6IbL6eaxCxKlq4iK30r2lVM8-ykjnllC0Ga85MtEenmZ52DnhR3ZhiGRFV_mY44HZClXD8TGIw)
 
-### Technical spec
+For table choice I was originally thinking it could make sense to keep click count in the Links table, but I wanted clicks to be trackable throughout time. It also gives freedom in case additional future info should be logged with each click, something that isn't possible with a simple counter in the Links table. Speed could eventually become an issue with this format since it has to count up clicks with a link's foreign ID, but it shouldn't be a problem for a while. Eventually an additional clicks column could be added on to Links if speed becomes an issue, but keep tracking them in the Clicks table also.
 
-Choose one of the following technical tracks to build the functionality described in the Functional spec that best suits your skill set:
+As for the Links table I would remove the slug column and just use :link instead of slug if I were to do this again, or I'd at least propose that to the team if it were on a real project. I know :slug is the appropriate way to make what's happening clear but having two columns in the table that are never different doesn't seem DRY. 
 
--	Back-end track: build a REST API and include a minimal front-end (e.g. a browsable API)
--	Front-end track: build your project as a purely client-side app
--	Full Stack: blend the former approaches, but be sure to demonstrate your competence across the stack
--	Mobile track: use the native SDKs for Android or iOS
+## Deployed 
 
-#### Back-end
+[On Heroku found here.](https://ambassador-code-rails.herokuapp.com/api/v1)
 
-Your task is to build a REST API that can support the functionality described for the Link and Landing pages in the functional spec. Your project can be built using any API framework/language, though we encourage the use of [Django Rest Framework](http://www.django-rest-framework.org/)/Python as these are used every day at ambassador. Your API should be able to:
+## Other Projects
 
--	Perform CRUD actions for Link pages
--	Track the number of visits to the Landing Page
+Highlighted projects can be found pinned on my GitHub, but here are a few cool ones I especially like.
 
-You do not have to build a functional UI unless you want to show off your talents across the stack. We will test your API by using the Browsable API. You are encouraged to write tests to verify your own results.
+[FiveCast](https://github.com/jpclark6/sweater-weather-fe) / [Sweater Weather](https://github.com/jpclark6/sweater-weather) - Deployed: [FiveCast](https://sweater-weather-1810.surge.sh/)/[Sweater Weater](https://sweater-weather-1810.herokuapp.com/api/v1/forecast?location=denver,co) This is a weather app I made to display weather forecasts for a city/state. This was the first project I did that creates a back and and front end on different servers. The back end is hosted on Heroku, and I used Surge for the single page front end. It was a solo project that I wrote all the code for, minus the basic framework. 
 
-#### Front-end
+Back end - I really enjoyed the back end since it uses APIs from DarkSky for weather, Flickr for images of the city, and Google Geocoding API to convert a city/state combo into a latitude and longitude required from the other two APIs. There is a lot of moving parts behind the scenes to display the weather forecast and it was a ton of fun and really cool to get everything to mesh up and work as expected. It also gave me some good experience using external APIs and now I feel like I truley have the world at my fingertips given how many really cool APIs are out there, such as the [NASA API](https://api.nasa.gov/), [NREL API](https://developer.nrel.gov/), or [Cat As A Service API](https://cataas.com/#/).
 
-Your project can be built using any JavaScript or CSS framework, though we encourage ReactJS, Redux and CSS/SCSS as these are used every day at Ambassador. You are also welcome to use our [React-ions library](https://www.npmjs.com/package/react-ions) to help build your UI.
+Front end - Since I'm a back end developer I thought the front end I made in vanilla javascript looks pretty awesome, and it's also mobile responsive. Unfortunately back end APIs aren't that exciting to look at so it was fun to make a visually appealing front end to show off. Showing friends your 'super cool site' you made and then showing them some JSON text just doens't have the desired effect.
 
-Alternatively, feel free to swap out similar JavaScript frameworks such as Angular and UI kits such as Bootstrap. In addition to building the referral application, complete the HTML/CSS challenge which can be found in the `/html-css-exercise` [folder in the repo](https://github.com/GetAmbassador/coding-challenge/tree/master/html-css-exercise).
+[I Wet My Plants GitHub](https://github.com/jpclark6/i-wet-my-plants) and [deplyed](https://i-wet-my-plants.herokuapp.com/) - This project was created with 4 other people and was a lot of fun to work on. I worked on a lot of various parts of it on my own and through pair programming. It's an app to help you to remember to water your plants. Some fun parts were that it uses Facebook OAuth (paired to create this), it tweets at you from a twitter account when it's time to water your plants (I did this part solo), and I also did a bit of styling on the site. The thing I was most excited about though was the back end API I build to integrate with hardware. A description can be found [here](http://i-wet-my-plants.herokuapp.com/api/v1). It allows a user to enter their hardware key in some theoretical watering hardware that can connect to the internet, and then the site will return whether your plants need watering. The hardware can then automatically water your plants and then send a POST back to the site telling it they're watered. It handrolls basic web tokens for a very secure watering system. By using text and keys created with that text it can keep track of whether POST requests to water are valid without keeping any information in the database about when it sent out keys to water and how long those keys are valid. I'd love to spend some time getting a fully functioning hardware sprinkler working once I'm out of school using Arduino. Maybe my houseplants won't die anymore (who am I kidding, I switched to industructable succulents long ago).
 
-#### Mobile
-
-If you're interviewing for a mobile position, use the native SDKs for Android or iOS to build the UI described above. Usage of open-source libraries is not required, but feel free to demonstrate your knowledge of the mobile ecosystem (ex. the libraries at http://square.github.io/). If you're interviewing for a combination Front-end/Mobile position, you can blend in your Front-end work into the app using a WebView.
-
-#### README
-
-In your repo, please include the following items in your README:
-
--	Description of the problem and solution.
--	Whether the solution focuses on back-end, front-end, full stack, or mobile.
--	Reasoning behind your technical choices, including architecture.
--	Trade-offs you might have made, anything you left out, or what you might do differently if you were to spend additional time on the project.
--	Link to the hosted application (where applicable).
-
-This will give us insight into how you approached the challenge.
-
-### Deployment
-
-When you're done, please deploy your project to [Heroku](https://dashboard.heroku.com). You may deploy to another service (such as AWS), but please include your reasoning behind this choice. Afterward, send a link to your repo. If you have chosen to make your repo private, please add `jarell-lloyd` and `fieldsco` as an admin so we can see your work.
-
-## Show us your other projects! (optional)
-
-If you have existing code that you would like to share, please follow these guidelines:
-
--	Include a link to the repository in the README file that is part of your coding challenge submission
--	A description of what the code does
--	If the repository has multiple contributors, please highlight the parts for which you were responsible
+[LEData](https://github.com/jpclark6/LEData) - This isn't a web app, but I was still very excited when I got it to work. It uses 2 Arduinos to send data using only an LED light and then a photo sensor. I took a video [here](https://youtu.be/fEUkzCr64Jk). The speeds are relatively slow in today's world at about 4 kbps but it's limited by the ADC in the Arduino. What I like about this project was it required me to design a custom protocol to send data since there isn't a clock signal. It is designed so that any clock signal can work as long as it doesn't timeout. So whether you send data with a clock length of 50 us or 200 ms it will still work. It also integrates a small LED screen to display the text. Overall it's nothing hugely spectacular, but it's a ton of fun to say "I did this from scratch and it works" when it's a fairly unique contraption and took some thought to get it to work.

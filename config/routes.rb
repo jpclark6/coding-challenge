@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get '/', to: 'links#index'
+  
+
   namespace :api do
     namespace :v1 do
       get '/', to: 'main#index'
