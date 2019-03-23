@@ -6,6 +6,7 @@ describe Link do
   end
 
   describe 'validations' do
+    subject { Link.create(link: 'something', slug: 'something') }
     it { should validate_presence_of :link }
     it { should validate_uniqueness_of :slug }
   end
