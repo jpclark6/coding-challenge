@@ -1,0 +1,23 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hidden {
+  display: none;
+}
+
+.link {
+  color: darkblue;
+  transition: .3s;
+}
+
+.link:hover {
+  color: darkred;
+  cursor: pointer;
+}
+
+.indented {
+  margin-left: 40px;
+}

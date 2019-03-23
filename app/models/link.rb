@@ -3,7 +3,7 @@ class Link < ApplicationRecord
   validates :link, presence: true
   validates :slug, presence: true
 
-  has_many :clicks
+  has_many :clicks, dependent: :destroy
 
   def to_param
     slug
