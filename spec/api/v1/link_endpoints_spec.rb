@@ -33,4 +33,16 @@ describe 'Links API' do
     expect(link_data[:data][:attributes][:link]).to eq('hawk')
     expect(link_data[:data][:attributes][:slug]).to eq('hawk')
   end
+
+  it 'can show individual link info from slug' do
+    link = Link.first
+    get "/api/v1/#{link.slug}"
+
+    expect(response).to be_successful
+    link_data = JSON.parse(response.body, symbolize_names: true)
+
+    expect(link_data[:data][:type]).to eq('links')
+    expect(link_data[:data][:attributes][:link]).to eq(link.link)
+    expect(link_data[:data][:attributes][:slug]).to eq(link.slug)
+  end
 end
