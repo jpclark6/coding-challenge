@@ -10,6 +10,27 @@ When someone clicks on a referral link and gets directed to '{url}/spartans' or 
 
 To delete a link the site should send a DELETE request to '/api/v1/links/spartans'. The deleted object will be returned on a successful delete, or a 404 and error will be returned if the delete didn't work. All clicks associated with that endpoint will be deleted.
 
+## Tech and Setup
+
+This project uses Rails although I want to try this in Django also.
+
+To set up the project run these commands to get a local version running (must have Ruby and Rails installed first):
+
+```
+git clone git@github.com:jpclark6/coding-challenge.git
+cd coding-challenge
+bundle install
+rake db:{create,migrate,seed}
+rails s
+```
+
+It uses the following libraries:
+1. RSpec for testing
+2. Capybara for testing
+3. Rack-cors to handle CORS issues
+4. Fast_jsonapi to serialize data
+5. Simplecov for testing coverage (99%)
+6. Shoulda-matchers for testing
 
 ## Problem & Solution
 
