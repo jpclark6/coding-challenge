@@ -29,9 +29,8 @@ describe 'Links API' do
     expect(response).to be_successful
     link_data = JSON.parse(response.body, symbolize_names: true)
 
-    expect(link_data[:data].length).to eq(1)
-    expect(link_data[:data][0][:type]).to eq('links')
-    expect(link_data[:data][0][:attributes][:link]).to eq('hawk')
-    expect(link_data[:data][0][:attributes][:slug]).to eq('hawk')
+    expect(link_data[:data][:type]).to eq('links')
+    expect(link_data[:data][:attributes][:link]).to eq('hawk')
+    expect(link_data[:data][:attributes][:slug]).to eq('hawk')
   end
 end
