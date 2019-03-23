@@ -1,4 +1,5 @@
 <h1>Ambassador Links API V1</h1>
+<p>Created by Justin Clark on 3-23-19</p>
 <h2>Description</h2>
 <p>
   For the Ambassador code challenge this API provides basic endpoints to save links, 
@@ -6,34 +7,34 @@
 </p>
 <h2>Endpoints</h2>
 <h3>Get all links with each link's click count</h3>
-<p id='get-all-links'>GET '/api/v1/links'</p>
-<p id='all-links'></p>
-<button id='all-button' class='hidden'>Hide</button>
+<p id='get-all-links' class='indented link'>GET '/api/v1/links'</p>
+<button id='all-button' class='hidden indented'>Hide</button>
+<pre id='all-links' class='indented'></pre>
 
 <h3>Get individual link with click count - also increments click count</h3>
-<p id='get-individual-link'>GET '/api/v1/links/link_name'</p>
-<p id='get-individual-link'>Example: GET '/api/v1/links/eagle'</p>
-<form>
+<p id='get-individual-link' class='indented'>GET '/api/v1/links/link_name'</p>
+<p id='get-individual-link-eagle' class='indented'>Example: <span class='link'>GET '/api/v1/links/eagle'</span></p>
+<form class='indented'>
   <input type='text' placeholder='Enter Link Name'>
-  <input type='submit' value='Find Link'>
+  <input id='get-ind' type='submit' value='Find Link'>
 </form>
-<p id='individual-link'></p>
-<button id='individual-button' class='hidden'>Hide</button>
+<button id='individual-eagle-button' class='hidden indented'>Hide</button>
+<pre id='individual-link' class='indented'></pre>
 
 <h3>Create new link</h3>
-<p id='create-link'>GET '/api/v1/links?link=link_name'</p>
-<form>
+<p id='create-link' class='indented'>GET '/api/v1/links?link=link_name'</p>
+<form class='indented'>
   <input type='text' placeholder='Enter Link Name'>
-  <input type='submit' value='Create Link'>
+  <input id='create' type='submit' value='Create Link'>
 </form>
-<p id='new-link'></p>
-<button id='create-button' class='hidden'>Hide</button>
+<button id='create-button' class='hidden indented'>Hide</button>
+<pre id='new-link' class='indented'></pre>
 
 <h3>Delete link</h3>
-<p id='delete-link'>DELETE '/api/v1/links?link=link_name'</p>
-<form>
+<p id='delete-link-text' class='indented'>DELETE '/api/v1/links?link=link_name'</p>
+<form class='indented'>
   <input type='text' placeholder='Enter Link Name'>
-  <input type='submit' value='Delete Link'>
+  <input id='delete' type='submit' value='Delete Link'>
 </form>
-<p id='delete-link'></p>
-<button id='delete-button' class='hidden'>Hide</button>
+<button id='delete-button' class='hidden indented'>Hide</button>
+<pre id='delete-link' class='indented'></pre>
