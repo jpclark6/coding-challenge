@@ -75,6 +75,23 @@ describe 'Links API' do
     expect(link_data[:data][:attributes][:clicks]).to eq(link.clicks.count)
   end
 
+  it 'individual link GET requests cause count of clicks to increase' do
+    link = Link.first
+    original_clicks = link.clicks.count
+
+    get "/api/v1/links/#{link.slug}"
+
+    expect(response).to be_successful
+    link_data = JSON.parse(response.body, symbolize_names: true)
+    expect(link_data[:data][:attributes][:clicks]).to eq(original_clicks + 1)
+
+    get "/api/v1/links/#{link.slug}"
+
+    expect(response).to be_successful
+    link_data = JSON.parse(response.body, symbolize_names: true)
+    expect(link_data[:data][:attributes][:clicks]).to eq(original_clicks + 2)
+  end
+
   it 'fails gracefully when slug show not found' do
     link = Link.first
     get "/api/v1/links/#{link.slug + 'nope'}"

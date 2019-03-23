@@ -15,6 +15,7 @@ class Api::V1::LinksController < ApplicationController
   def show
     link = Link.find_by(slug: params[:slug])
     if link
+      Click.create(link: link)
       render json: LinksSerializer.new(link)
     else
       render json: {'error' => 'cannot find link'}, status: 404
