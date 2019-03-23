@@ -8,7 +8,7 @@ class Api::V1::LinksController < ApplicationController
     if link.save
       render json: LinksSerializer.new(link)
     else
-      render json: {'error' => 'post unsuccessful'}
+      render json: {'error' => 'post unsuccessful'}, status: 404
     end
   end
 
@@ -17,7 +17,16 @@ class Api::V1::LinksController < ApplicationController
     if link
       render json: LinksSerializer.new(link)
     else
-      render json: {'error' => 'cannot find link'}
+      render json: {'error' => 'cannot find link'}, status: 404
+    end
+  end
+
+  def destroy
+    link = Link.find_by(slug: params[:slug])
+    if link && link.destroy
+      render json: LinksSerializer.new(link)
+    else
+      render json: {'error' => 'cannot find link'}, status: 404
     end
   end
 end

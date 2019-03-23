@@ -56,7 +56,7 @@ describe 'Links API' do
     link_name = 'hawk'
     post '/api/v1/links', params: { link: link_name }
 
-    expect(response).to be_successful
+    expect(response.status).to eq(404)
     link_data = JSON.parse(response.body, symbolize_names: true)
 
     expect(link_data[:error]).to eq('post unsuccessful')
@@ -75,11 +75,34 @@ describe 'Links API' do
     expect(link_data[:data][:attributes][:clicks]).to eq(link.clicks.count)
   end
 
-  it 'fails gracefully when slug not found' do
+  it 'fails gracefully when slug show not found' do
     link = Link.first
     get "/api/v1/links/#{link.slug + 'nope'}"
 
+    expect(response.status).to eq(404)
+    link_data = JSON.parse(response.body, symbolize_names: true)
+
+    expect(link_data[:error]).to eq('cannot find link')
+  end
+
+  it 'can delete a link' do
+    link = Link.first
+    delete "/api/v1/links/#{link.slug}"
+
     expect(response).to be_successful
+    link_data = JSON.parse(response.body, symbolize_names: true)
+
+    expect(link_data[:data][:type]).to eq('links')
+    expect(link_data[:data][:attributes][:link]).to eq(link.link)
+    expect(link_data[:data][:attributes][:slug]).to eq(link.slug)
+    expect(link_data[:data][:attributes][:clicks]).to eq(link.clicks.count)
+  end
+
+  it 'fails gracefully when slug delete not found' do
+    link = Link.first
+    delete "/api/v1/links/#{link.slug + 'nope'}"
+
+    expect(response.status).to eq(404)
     link_data = JSON.parse(response.body, symbolize_names: true)
 
     expect(link_data[:error]).to eq('cannot find link')
