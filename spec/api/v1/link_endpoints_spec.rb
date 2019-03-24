@@ -138,4 +138,15 @@ describe 'Links API' do
     expect(link_data[:data][:attributes][:slug]).to eq(new_title)
     expect(link_data[:data][:attributes][:clicks]).to eq(link.clicks.count)
   end
+
+  it 'fails gracefully when edit not accepted' do
+    link = Link.first
+    link_2 = Link.second
+    put "/api/v1/links/#{link.slug}?link=#{link_2.slug}"
+
+    expect(response.status).to eq(404)
+    link_data = JSON.parse(response.body, symbolize_names: true)
+
+    expect(link_data[:error]).to eq('error editing link')
+  end
 end

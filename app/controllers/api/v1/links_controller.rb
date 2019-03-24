@@ -24,11 +24,10 @@ class Api::V1::LinksController < ApplicationController
 
   def update
     link = Link.find_by(slug: params[:slug])
-    if link
-      link.update(link: params[:link], slug: params[:link])
+    if link.update(link: params[:link], slug: params[:link])
       render json: LinksSerializer.new(link)
     else
-      render json: {'error' => 'cannot find link'}, status: 404
+      render json: {'error' => 'error editing link'}, status: 404
     end
   end
 
