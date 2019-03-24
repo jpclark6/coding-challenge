@@ -149,4 +149,15 @@ describe 'Links API' do
 
     expect(link_data[:error]).to eq('error editing link')
   end
+
+  it 'fails gracefully when edit link not found' do
+    link = Link.first
+    link_2 = Link.second
+    put "/api/v1/links/#{link.slug + 'nope'}?link=#{link_2.slug}"
+
+    expect(response.status).to eq(404)
+    link_data = JSON.parse(response.body, symbolize_names: true)
+
+    expect(link_data[:error]).to eq('error editing link')
+  end
 end
