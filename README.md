@@ -6,6 +6,8 @@ This is a basic API to serve up data to a website that can track referrals. It h
 
 When a user enters in text into the text box to create a new link the site should send a POST request to '/api/v1/links?link={link_title}' which will return the object if successful, or return a 404 with an error if it didn't work, most likely due to the title not being unique. They can then either display this onto the end of the list, or make another GET request for all links.
 
+To edit a link send a PUT request to '/api/v1/links/spartans?link={new_link_title}' if you wanted to change the link of spartans.
+
 When someone clicks on a referral link and gets directed to '{url}/spartans' or whatever the title is, the site should make a GET request to '/api/v1/links/spartans' before redirecting to '{url}/landing?link=spartans'. This will return JSON with the link title and also increment the counter by one. 
 
 To delete a link the site should send a DELETE request to '/api/v1/links/spartans'. The deleted object will be returned on a successful delete, or a 404 and error will be returned if the delete didn't work. All clicks associated with that endpoint will be deleted.
