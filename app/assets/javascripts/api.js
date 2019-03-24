@@ -1,6 +1,6 @@
 window.onload = () => {
   
-
+  // HTTP REQUESTS
   const getAllLinks = () => {
     $.getJSON(`/api/v1/links`, function (response) {
       $('#all-links').text(JSON.stringify(response, null, 2));
@@ -36,6 +36,17 @@ window.onload = () => {
       success: (response) => {
         $('#delete-link').text(JSON.stringify(response, null, 2));
         $('#delete-button').removeClass('hidden');
+      }
+    })
+  }
+
+  const editInd = (old_slug, new_slug) => {
+    $.ajax({
+      url: `/api/v1/links/${old_slug}?link=${new_slug}`,
+      type: "PUT",
+      success: (response) => {
+        $('#edit-link').text(JSON.stringify(response, null, 2));
+        $('#edit-button').removeClass('hidden');
       }
     })
   }
@@ -97,10 +108,24 @@ window.onload = () => {
       $('#delete-link').text('');
     })
   }
+  const addListenerToEdit = () => {
+    $('#edit').click((e) => {
+      e.preventDefault();
+      editInd($('#edit-old').val(), $('#edit-new').val());
+    })
+    $('#edit-button').click((e) => {
+      e.preventDefault();
+      $('#edit-button').addClass('hidden');
+      $('#edit-link').text('');
+    })
+  }
+
+  // ADD EVENT LISTENERS TO DOM
 
   addListenerToGetAll();
   addListenerToGetInd();
   addListenerToGetEagle();
   addListenerToCreate();
   addListenerToDelete();
+  addListenerToEdit();
 }

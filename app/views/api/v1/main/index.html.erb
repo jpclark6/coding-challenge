@@ -31,13 +31,14 @@
 <pre id='new-link' class='indented'></pre>
 
 <h3>Edit link</h3>
-<p id='create-link' class='indented'>GET '/api/v1/links?link=link_name'</p>
+<p id='edit-link-text' class='indented'>PUT '/api/v1/links/old_link?link=new_link'</p>
 <form class='indented'>
-  <input type='text' placeholder='Enter Link Name'>
-  <input id='create' type='submit' value='Create Link'>
+  <input id='edit-old' type='text' placeholder='Enter Link To Edit'>
+  <input id='edit-new' type='text' placeholder='Enter New Link Name'>
+  <input id='edit' type='submit' value='Update Link'>
 </form>
-<button id='create-button' class='hidden indented'>Hide</button>
-<pre id='new-link' class='indented'></pre>
+<button id='edit-button' class='hidden indented'>Hide</button>
+<pre id='edit-link' class='indented'></pre>
 
 <h3>Delete link</h3>
 <p id='delete-link-text' class='indented'>DELETE '/api/v1/links/link_name'</p>
