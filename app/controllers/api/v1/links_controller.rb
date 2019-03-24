@@ -22,6 +22,16 @@ class Api::V1::LinksController < ApplicationController
     end
   end
 
+  def update
+    link = Link.find_by(slug: params[:slug])
+    if link
+      link.update(link: params[:link], slug: params[:link])
+      render json: LinksSerializer.new(link)
+    else
+      render json: {'error' => 'cannot find link'}, status: 404
+    end
+  end
+
   def destroy
     link = Link.find_by(slug: params[:slug])
     if link && link.destroy
